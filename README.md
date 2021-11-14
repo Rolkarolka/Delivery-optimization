@@ -68,14 +68,39 @@ Timeline:
 
 Problem zgłoszony przez klienta: „Mamy problemy z odpowiednim zapełnianiem półek magazynowych. Nigdy nie wiadomo, co tak naprawdę będzie potrzebne w najbliższym tygodniu, co powinniśmy zamówić. Może da się coś z tym zrobić?”
 
-Kontekst:
-Zadanie biznesowe:
-Biznesowe kryterium sukcesu:
+### Definicja problemu biznesowego
 
+Analiza kontekstu: 
+- obecna sytuacja: nie wiadomo jak zapełniać półki magazynowa; sklep nie potrafi przewidzień co będzie potrzbne w najbliższym tygodniu
+- co ma zostać wprowadzone? analiza danych oraz przewidywanie co będzie potrzebne w najbliższym tygodniu
+- jakie właściwości powinno mieć docelowe rozwiązanie? proste, szybkie, wiarygodne
+- jakie są założenia, oczekiwania, ograniczenia, zasoby? oczekiwania: zapełnianie półek magazynowych dobrymi produktami; ograniczenia: ilość danych do analizy (nie są to dane z całego roku); ograniczona ilość miejsca w magazynie; zasoby: towar dostarczony od dostawców (tutaj chyba zakładamy, że jest on nieskończony)
+
+Kontekst: sklep internetowy, z którego użytkownicy zamawiają produkty. Długość dostawy zależy, czy produkt znajduje się w magazynie.
+
+Zadanie biznesowe: **TODO**
+Biznesowe kryterium sukcesu:  **TODO**
+
+### Zdefiniowanie zadania/zadań modelowania i wszystkich założeń
 Zadanie modelowania:
-Dane do modelowania:
-Założenia:
+Przygotowanie modelu rekomendacyjnego na podstawie ilości zamówień w poprzednim roku oraz tendencji klientów.
 
-Analityczne kryterium sukcesu:
+Dane do modelowania:
+- zamówienia z ostatniego tygodnia (cena, kategorie produktów)
+- stosunek ilości zamówień w danych okresach roku (np miesięcznie, kwartalnie)
+- informacje podawane przez użytkowników - np miejsce zamieszkania
+
+Przewidywanie produktów, które w danym tygodniu powinny znajdować się na półkach magazynowych.
+
+Założenia:
+- w danym okresie każdego roku stosunek ilości zamówień jest podobny 
+- liczba miejsc w magazynie jest ograniczona, ale wystarczająca, aby pomieścić wszystkie przewidywane produkty na dany tydzień
+### Zaproponowanie kryteriów sukcesu
+
+System powinien generować co najmniej x nowych zamówień ?
+
+System powinien generować zmniejszenie czasu dostawy o x ?
+
+**System powinien przewidywać minimum x% produktów (np ilość produktów przewidzianych/wszystkich produktów >= x/średnia dzienna ilość zamówień)**
 
 ## Analiza danych
