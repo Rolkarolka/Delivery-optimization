@@ -71,15 +71,19 @@ Problem zgłoszony przez klienta: „Mamy problemy z odpowiednim zapełnianiem p
 ### Definicja problemu biznesowego
 
 Analiza kontekstu: 
-- obecna sytuacja: nie wiadomo jak zapełniać półki magazynowa; sklep nie potrafi przewidzień co będzie potrzbne w najbliższym tygodniu
-- co ma zostać wprowadzone? analiza danych oraz przewidywanie co będzie potrzebne w najbliższym tygodniu
-- jakie właściwości powinno mieć docelowe rozwiązanie? proste, szybkie, wiarygodne
-- jakie są założenia, oczekiwania, ograniczenia, zasoby? oczekiwania: zapełnianie półek magazynowych dobrymi produktami; ograniczenia: ilość danych do analizy (nie są to dane z całego roku); ograniczona ilość miejsca w magazynie; zasoby: towar dostarczony od dostawców (tutaj chyba zakładamy, że jest on nieskończony)
+- obecna sytuacja: 
+    - nie wiadomo jak zapełniać półki magazynowa; sklep nie potrafi przewidzień co będzie potrzbne w najbliższym tygodniu
+- co ma zostać wprowadzone? 
+    - analiza danych oraz przewidywanie co będzie potrzebne w najbliższym tygodniu
+- jakie są założenia, oczekiwania, ograniczenia, zasoby? 
+    -  oczekiwania: zapełnianie półek magazynowych dobrymi produktami; 
+    -  ograniczenia: ilość danych do analizy (nie są to dane z całego roku); ograniczona ilość miejsca w magazynie; 
+    -  zasoby: towar dostarczony od dostawców (tutaj chyba zakładamy, że jest on nieskończony)
 
 Kontekst: sklep internetowy, z którego użytkownicy zamawiają produkty. Długość dostawy zależy, czy produkt znajduje się w magazynie.
 
-Zadanie biznesowe: **TODO**
-Biznesowe kryterium sukcesu:  **TODO**
+Zadanie biznesowe: generowanie listy produktów na kolejny tydzień
+Biznesowe kryterium sukcesu: wzrost sprzedaży
 
 ### Zdefiniowanie zadania/zadań modelowania i wszystkich założeń
 Zadanie modelowania:
@@ -97,10 +101,8 @@ Założenia:
 - liczba miejsc w magazynie jest ograniczona, ale wystarczająca, aby pomieścić wszystkie przewidywane produkty na dany tydzień
 ### Zaproponowanie kryteriów sukcesu
 
-System powinien generować co najmniej x nowych zamówień ?
-
-System powinien generować zmniejszenie czasu dostawy o x ?
-
-**System powinien przewidywać minimum x% produktów (np ilość produktów przewidzianych/wszystkich produktów >= x/średnia dzienna ilość zamówień)**
+System powinien przewidywać minimum x% produktów (np ilość produktów przewidzianych/wszystkich produktów >= x/średnia dzienna ilość zamówień)
 
 ## Analiza danych
+
+Umiejscowiona w jupyter notebooku data_analysis.ipnyb
