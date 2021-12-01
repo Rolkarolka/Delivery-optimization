@@ -105,4 +105,4 @@ System powinien przewidywać minimum x% produktów (np ilość produktów przewi
 
 ## Analiza danych
 
-Umiejscowiona w jupyter notebooku data_analysis.ipnyb
+Umiejscowiona w jupyter notebooku data_analysis.ipynb
