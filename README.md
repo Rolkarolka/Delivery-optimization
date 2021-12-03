@@ -72,13 +72,13 @@ Problem zgłoszony przez klienta: „Mamy problemy z odpowiednim zapełnianiem p
 
 Analiza kontekstu: 
 - obecna sytuacja: 
-    - nie wiadomo jak zapełniać półki magazynowa; sklep nie potrafi przewidzień co będzie potrzbne w najbliższym tygodniu
+    - nie wiadomo jak zapełniać półki magazynowa; sklep nie potrafi przewidzień co będzie potrzebne w najbliższym tygodniu
 - co ma zostać wprowadzone? 
     - analiza danych oraz przewidywanie co będzie potrzebne w najbliższym tygodniu
-- jakie są założenia, oczekiwania, ograniczenia, zasoby? 
+- jakie są oczekiwania, ograniczenia, zasoby? 
     -  oczekiwania: zapełnianie półek magazynowych dobrymi produktami; 
-    -  ograniczenia: ilość danych do analizy (nie są to dane z całego roku); ograniczona ilość miejsca w magazynie; 
-    -  zasoby: towar dostarczony od dostawców (tutaj chyba zakładamy, że jest on nieskończony)
+    -  ograniczenia: ilość miejsca w magazynie; 
+    -  zasoby: towar dostarczony od dostawców.
 
 Kontekst: sklep internetowy, z którego użytkownicy zamawiają produkty. Długość dostawy zależy, czy produkt znajduje się w magazynie.
 
@@ -91,17 +91,18 @@ Przygotowanie modelu rekomendacyjnego na podstawie ilości zamówień w poprzedn
 
 Dane do modelowania:
 - zamówienia z ostatniego tygodnia (cena, kategorie produktów)
-- stosunek ilości zamówień w danych okresach roku (np miesięcznie, kwartalnie)
-- informacje podawane przez użytkowników - np miejsce zamieszkania
+- stosunek ilości zamówień w danych okresach roku (np. miesięcznie, kwartalnie)
+- aktywność użytkowników oraz produkty, które wyświetlają.
 
 Przewidywanie produktów, które w danym tygodniu powinny znajdować się na półkach magazynowych.
 
 Założenia:
-- w danym okresie każdego roku stosunek ilości zamówień jest podobny 
-- liczba miejsc w magazynie jest ograniczona, ale wystarczająca, aby pomieścić wszystkie przewidywane produkty na dany tydzień
+- liczba miejsc w magazynie jest ograniczona - ustalamy ją jako stałą
+- produkty, które zamawiamy trafiają do nas od razu - nie musimy brać pod uwagę czasu potrzebnego na ich dotarcie do naszego magazynu
+- produkty, które zamawiamy od dostawców są zawsze dostępne.
 ### Zaproponowanie kryteriów sukcesu
 
-System powinien przewidywać minimum x% produktów (np ilość produktów przewidzianych/wszystkich produktów >= x/średnia dzienna ilość zamówień)
+System powinien przewidywać minimum x% produktów (np. ilość produktów przewidzianych/wszystkich produktów >= x/średnia dzienna ilość zamówień)
 
 ## Analiza danych
 
