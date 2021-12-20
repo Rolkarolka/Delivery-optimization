@@ -94,6 +94,12 @@ Dane do modelowania:
 - stosunek ilości zamówień w danych okresach roku (np. miesięcznie, kwartalnie)
 - aktywność użytkowników oraz produkty, które wyświetlają.
 
+Zmianne celu:
+- procentowy udział produktów z danej kategorii względem wszystkich zamówień,
+- tendencja (wzrostowa lub spadkowa) ilości zamówień produktów z danej kategorii w kolejnych latach,
+- stosunek ilości wyświetleń do ilości zamówień produktów z danej kategorii (jeśli ilość wyświetleń rośnie spodziewamy się wzrostu ilości zamówień),
+- zmiana cen produktów (jeśli cena (nie) znajduje się w przedział chętniej kupowanych produktów)
+
 Przewidywanie produktów, które w danym tygodniu powinny znajdować się na półkach magazynowych.
 
 Założenia:
@@ -103,6 +109,8 @@ Założenia:
 ### Zaproponowanie kryteriów sukcesu
 
 System powinien przewidywać minimum x% produktów (np. ilość produktów przewidzianych/wszystkich produktów >= x/średnia dzienna ilość zamówień)
+
+x - wartość uzgodniona z klientem
 
 ## Analiza danych
 
