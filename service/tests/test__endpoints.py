@@ -4,7 +4,7 @@ from service.main import app
 from service.delivery_optimization import Database
 
 client = TestClient(app)
-
+# TODO working on test src
 
 def test_root_view():
     response = client.get("/")
@@ -21,7 +21,6 @@ def test_append_user(username, group):
     response = client.post("/new-user", json={"username": username})
     assert response.status_code == 200
     assert response.json() == {"message": f"Username {username} added. Your group is {group}"}
-
 
 @pytest.mark.parametrize("username,group", [("Karolina", "A")])
 def test_do_not_append_user(username, group):

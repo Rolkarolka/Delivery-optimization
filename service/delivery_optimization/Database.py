@@ -1,17 +1,30 @@
-import json
+import csv
+from subprocess import check_output
 
 class Database:
-    def __init__(self, path):
-        self.__users = self.__load_from_file(path + "/users.json")
+    def __init__(self):
+        self.__users = {}
+        self.__load_from_file("users.csv")
 
-    def __load_from_file(self, path):
-        with open(path, mode='r') as file:
-            text = file.read().replace("\n", "")
-            return json.loads(text)
+    def get_path(self, filename):
+        project_root = check_output(['git', 'rev-parse', '--show-toplevel']).decode('ascii').strip()
+        return project_root + "/service/database/" + filename
+
+    def __load_from_file(self, filename):
+        with open(self.get_path(filename), mode='r', encoding='UTF-8') as file:
+            reader = csv.reader(file, delimiter=',')
+            for row in reader:
+                self.__users[row[0]] = row[1]
+
+    def __save_to_file(self, filename, key, value):
+        with open(self.get_path(filename), mode='a', newline='') as file:
+            writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow([key, value])
 
     def create_new_user(self, username):
         if username not in self.__users:
             group = self.__get_new_user_group()
+            self.__save_to_file("users.csv", username, group)
             self.__users[username] = group
             return group
         else:
@@ -22,8 +35,10 @@ class Database:
         return "B"
 
     def get_user_group(self, username: str):
-        return self.__users[username]
+        if username in self.__users:
+            return self.__users[username]
+        return self.create_new_user(username)
 
     def save_prediction(self, group, prediction):
-        # TODO
-        pass
+        with open(self.get_path("predictions.csv"), mode='a') as file:
+            file.write(f'"{group}": "{prediction}"')

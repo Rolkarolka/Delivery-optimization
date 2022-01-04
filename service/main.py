@@ -5,13 +5,14 @@ from service.delivery_optimization import Database, ModelA, ModelB, ModelData
 from pydantic import BaseModel
 
 app = FastAPI()
-app.database = Database("./database")
+app.database = Database()
 app.models = {"A": ModelA(), "B": ModelB()}
 
 class Item(BaseModel):
     username: Optional[str] = None
     product_name: Optional[str] = None
 
+# TODO post without item?
 
 @app.get("/")
 def root_view():
