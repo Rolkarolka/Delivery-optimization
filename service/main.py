@@ -8,11 +8,10 @@ app = FastAPI()
 app.database = Database()
 app.models = {"A": ModelA(), "B": ModelB()}
 
-class Item(BaseModel):
+class Query(BaseModel):
     username: Optional[str] = None
     product_name: Optional[str] = None
 
-# TODO post without item?
 
 @app.get("/")
 def root_view():
@@ -25,17 +24,17 @@ def upload_data(data: ModelData):
     return {"message": "Data uploaded"}
 
 @app.post("/new-user")
-def append_new_user(item: Item):
+def append_new_user(query: Query):
     try:
-        group = app.database.create_new_user(item.username)
-        return {"message": f"Username {item.username} added. Your group is {group}"}
+        group = app.database.create_new_user(query.username)
+        return {"message": f"Username {query.username} added. Your group is {group}"}
     except ValueError as er:
         return {"message": "Sorry, user with that username exists."}
 
 @app.get("/{username}/prediction")
-def get_prediction(username: str, item: Item):
+def get_prediction(username: str, query: Query):
     group = app.database.get_user_group(username)
-    prediction = app.models[group].get_prediction(item.product_name)
+    prediction = app.models[group].get_prediction(query.product_name)
     app.database.save_prediction(group, prediction)
     return prediction
 
