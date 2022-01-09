@@ -6,8 +6,9 @@ from pydantic import BaseModel
 import os
 
 app = FastAPI()
-app.database = Database()
-app.models = Models()
+app.path = './database/'
+app.database = Database(app.path)
+app.models = Models(app.path)
 
 class Query(BaseModel):
     username: Optional[str] = None
@@ -21,8 +22,7 @@ def root_view():
 
 @app.post("/upload-sessions")
 def upload_data(sessions: UploadFile = File(...)):
-    print(os.getcwd())
-    with open("./service/database/sessions.jsonl", mode='ab+') as f:
+    with open(app.path + "/sessions.jsonl", mode='ab+') as f:
         f.write(sessions.file.read())
     return {"message": "Data uploaded"}
 

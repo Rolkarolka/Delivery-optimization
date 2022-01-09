@@ -5,9 +5,9 @@ from sklearn import linear_model
 import datetime
 
 class Models:
-    def __init__(self):
-        self.sessions_df = self.read_training_data("./data/raw/sessions.jsonl", 'session_id')
-        self.products_df = self.read_training_data("./data/raw/products.jsonl", 'product_id')
+    def __init__(self, database_path):
+        self.sessions_df = self.read_training_data(database_path + "/sessions.jsonl", 'session_id')
+        self.products_df = self.read_training_data(database_path + "/products.jsonl", 'product_id')
         self.weeks_df = self.convert_date_to_week_set()
         self.models = {"A": {}, "B": {}}
         self._initialize_models()

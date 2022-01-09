@@ -8,8 +8,7 @@ class Database:
         self.__load_from_file("users.csv")
 
     def get_path(self, filename):
-        project_root = check_output(['git', 'rev-parse', '--show-toplevel']).decode('ascii').strip()
-        return project_root + self.database_path + filename
+        return self.database_path + filename
 
     def __load_from_file(self, filename):
         with open(self.get_path(filename), mode='r', encoding='UTF-8') as file:
