@@ -1,10 +1,8 @@
 from numpy.core.fromnumeric import prod
 from pydantic import BaseModel
 import pandas as pd
-import numpy as np
 from sklearn import linear_model
 import datetime
-import os
 
 class Models:
     def __init__(self):
@@ -50,7 +48,7 @@ class Models:
         predictions = {}
         for product_id in products_id:
             predictions[product_id] = self.models[group][product_id].get_prediction(week_number)
-        return predictions
+        return predictions, week_number
 
 class ModelData(BaseModel):
     id: str

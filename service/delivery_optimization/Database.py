@@ -32,6 +32,7 @@ class Database:
             raise ValueError("User with that username exists.")
 
     def __get_new_user_group(self, username):
+        # TODO rozklad normalny?
         h = sum([ord(char) for char in username])
         if h % 2:
             return "A"
@@ -43,6 +44,8 @@ class Database:
             return self.__users[username]
         return self.create_new_user(username)
 
-    def save_prediction(self, group, prediction):
-        with open(self.get_path("predictions.csv"), mode='a') as file:
-            file.write(f'"{group}": "{prediction}"')
+    def save_prediction(self, group, predictions, week_number):
+        with open(self.get_path("predictions.csv"), mode='a', newline='', encoding='UTF-8') as file:
+            writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for product_id, prediction in predictions.items():
+                writer.writerow([group, week_number, product_id, prediction])

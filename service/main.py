@@ -1,8 +1,9 @@
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 import uvicorn
 from service.delivery_optimization import Database, Models, ModelData
 from pydantic import BaseModel
+import os
 
 app = FastAPI()
 app.database = Database()
@@ -18,10 +19,11 @@ class Query(BaseModel):
 def root_view():
     return {"project name": "Delivery Optimization", "Endpoint description": "/docs"}
 
-@app.post("/upload-data")
-def upload_data(data: ModelData):
-    for model in app.models.values():
-        model.update_model(data)
+@app.post("/upload-sessions")
+def upload_data(sessions: UploadFile = File(...)):
+    print(os.getcwd())
+    with open("./service/database/sessions.jsonl", mode='ab+') as f:
+        f.write(sessions.file.read())
     return {"message": "Data uploaded"}
 
 @app.post("/new-user")
@@ -36,13 +38,12 @@ def append_new_user(query: Query):
 def get_predictions(username: str, products, date=None):
     products = list(map(int, products.split(',')))
     group = app.database.get_user_group(username)
-    predictions = app.models.get_predictions(group, products, date)
-    # app.database.save_prediction(group, predictions)
+    predictions, week_number = app.models.get_predictions(group, products, date)
+    app.database.save_prediction(group, predictions, week_number)
     return predictions
 
 
 if __name__ == "__main__":
-    # app.models.get_predictions("A", [1114], 126)
     uvicorn.run(app,
                 host="127.0.0.1",
                 port=8000

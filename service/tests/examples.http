@@ -7,14 +7,6 @@ content-type: application/json
 ####
 GET http://localhost:8000/ HTTP/1.1
 ####
-GET http://localhost:8000/Karolina/prediction?products=114,1115 HTTP/1.1
+GET http://localhost:8000/Karolina/prediction?products=1116,1117 HTTP/1.1
 content-type: application/json
 ####
-POST http://localhost:8000/upload-data HTTP/1.1
-content-type: application/json
-
-{
-    "id": 1234
-}
-
-
