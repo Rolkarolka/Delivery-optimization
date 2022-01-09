@@ -7,12 +7,8 @@ content-type: application/json
 ####
 GET http://localhost:8000/ HTTP/1.1
 ####
-GET http://localhost:8000/Tadeusz/prediction HTTP/1.1
+GET http://localhost:8000/Karolina/prediction?products=114,1115 HTTP/1.1
 content-type: application/json
-
-{
-    "product_name": "Fallout 3 (Xbox 360)"
-}
 ####
 POST http://localhost:8000/upload-data HTTP/1.1
 content-type: application/json

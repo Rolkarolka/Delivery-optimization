@@ -1,16 +1,17 @@
 from typing import Optional
 from fastapi import FastAPI
 import uvicorn
-from service.delivery_optimization import Database, ModelA, ModelB, ModelData
+from service.delivery_optimization import Database, Models, ModelData
 from pydantic import BaseModel
 
 app = FastAPI()
 app.database = Database()
-app.models = {"A": ModelA(), "B": ModelB()}
+app.models = Models()
 
 class Query(BaseModel):
     username: Optional[str] = None
-    product_name: Optional[str] = None
+    products: Optional[list] = None
+    date: Optional[str] = None
 
 
 @app.get("/")
@@ -32,14 +33,16 @@ def append_new_user(query: Query):
         return {"message": "Sorry, user with that username exists."}
 
 @app.get("/{username}/prediction")
-def get_prediction(username: str, query: Query):
+def get_predictions(username: str, products, date=None):
+    products = list(map(int, products.split(',')))
     group = app.database.get_user_group(username)
-    prediction = app.models[group].get_prediction(query.product_name)
-    app.database.save_prediction(group, prediction)
-    return prediction
+    predictions = app.models.get_predictions(group, products, date)
+    # app.database.save_prediction(group, predictions)
+    return predictions
 
 
 if __name__ == "__main__":
+    # app.models.get_predictions("A", [1114], 126)
     uvicorn.run(app,
                 host="127.0.0.1",
                 port=8000
