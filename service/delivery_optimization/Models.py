@@ -1,11 +1,13 @@
 from numpy.core.fromnumeric import prod
-from pydantic import BaseModel
+
 import pandas as pd
 from sklearn import linear_model
 import datetime
+from statsmodels.tsa.arima.model import ARIMA
 
 class Models:
     def __init__(self, database_path):
+        self.database_path = database_path
         self.sessions_df = self.read_training_data(database_path + "/sessions.jsonl", 'session_id')
         self.products_df = self.read_training_data(database_path + "/products.jsonl", 'product_id')
         self.weeks_df = self.convert_date_to_week_set()
@@ -28,9 +30,11 @@ class Models:
     def _initialize_models(self):
         for product_id in self.products_df.index:
             self.models["A"][product_id] = ModelA(self.weeks_df, self.sessions_df[self.sessions_df['product_id'] == product_id])
+            self.models["B"][product_id] = ModelB(self.weeks_df, self.sessions_df[self.sessions_df['product_id'] == product_id])
 
     def update_models(self):
-        pass
+        self.sessions_df = self.read_training_data(self.database_path + "/sessions.jsonl", 'session_id')
+        self._initialize_models()
 
     def calculate_week_number(self, date_for_prediction=None):
         if date_for_prediction is None:
@@ -49,9 +53,6 @@ class Models:
         for product_id in products_id:
             predictions[product_id] = self.models[group][product_id].get_prediction(week_number)
         return predictions, week_number
-
-class ModelData(BaseModel):
-    id: str
 
 class ModelA:
     def __init__(self, weeks_df, sessions_df):
@@ -75,16 +76,30 @@ class ModelA:
         time_list = [(self.weeks_df[i].start_time, self.weeks_df[i].end_time) for i in range(len(self.weeks_df))]
         return [product_amount['timestamp'].between(s, e).sum() for s, e in time_list]
 
-    def get_prediction(self, week_number=None):
+    def get_prediction(self, week_number):
         return self.model.predict([[week_number]])[0]
 
-    def update_model(self, data: ModelData):
-        pass
-
 class ModelB:
-    def get_prediction(self, product_name: str):
-        # TODO
-        return ""
+    def __init__(self, weeks_df, sessions_df):
+        self.weeks_df = weeks_df
+        self.bought_products = self.product_bought(sessions_df)
+        self.model = self.fit_model(self.bought_products)
 
-    def update_model(self, data: ModelData):
-        pass
+    def product_bought(self, sessions_df):
+        product_amount = sessions_df[sessions_df['event_type'] == "BUY_PRODUCT"]
+        time_list = [(self.weeks_df[i].start_time, self.weeks_df[i].end_time) for i in range(len(self.weeks_df))]
+        return [product_amount['timestamp'].between(s, e).sum() for s, e in time_list]
+
+    def fit_model(self, dataset):
+        model = ARIMA(dataset, order=(1, 1, 1))
+        model_fit = model.fit()
+        return model_fit
+
+    def add_empty_rows(self, data_list, amount):
+        return data_list + [0] * amount
+
+    def get_prediction(self, week_number):
+        if week_number > len(self.bought_products):
+            self.bought_products += [0] * (week_number - len(self.bought_products))
+        forecast = self.model.predict(start=week_number, end=week_number, dynamic=True)
+        return forecast[0]

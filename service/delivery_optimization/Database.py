@@ -1,14 +1,13 @@
 import csv
-from subprocess import check_output
 
 class Database:
-    def __init__(self, path="/service/database/"):
-        self.database_path = path
+    def __init__(self, path="service/database/"):
+        self.path = path
         self.__users = {}
         self.__load_from_file("users.csv")
 
     def get_path(self, filename):
-        return self.database_path + filename
+        return self.path + filename
 
     def __load_from_file(self, filename):
         with open(self.get_path(filename), mode='r', encoding='UTF-8') as file:

@@ -1,14 +1,14 @@
 from typing import Optional
 from fastapi import FastAPI, UploadFile, File
 import uvicorn
-from service.delivery_optimization import Database, Models, ModelData
+from service.delivery_optimization import Database, Models
 from pydantic import BaseModel
 import os
 
 app = FastAPI()
-app.path = './database/'
-app.database = Database(app.path)
-app.models = Models(app.path)
+# app.path = './database/'
+app.database = Database()
+app.models = Models(app.database.path)
 
 class Query(BaseModel):
     username: Optional[str] = None
@@ -24,6 +24,7 @@ def root_view():
 def upload_data(sessions: UploadFile = File(...)):
     with open(app.path + "/sessions.jsonl", mode='ab+') as f:
         f.write(sessions.file.read())
+    app.models.update_models()
     return {"message": "Data uploaded"}
 
 @app.post("/new-user")
