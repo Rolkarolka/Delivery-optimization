@@ -1,24 +1,22 @@
 from typing import Optional
 from fastapi import FastAPI, UploadFile, File
+from starlette.responses import RedirectResponse
 import uvicorn
 from service.delivery_optimization import Database, Models
 from pydantic import BaseModel
-import os
 
 app = FastAPI()
-# app.path = './database/'
-app.database = Database()
-app.models = Models(app.database.path)
+app.path = 'service/database/'
+app.database = Database(app.path)
+app.models = Models(app.path)
 
-class Query(BaseModel):
+class Body(BaseModel):
     username: Optional[str] = None
-    products: Optional[list] = None
-    date: Optional[str] = None
 
 
 @app.get("/")
 def root_view():
-    return {"project name": "Delivery Optimization", "Endpoint description": "/docs"}
+    return RedirectResponse(url="/docs", status_code=301)
 
 @app.post("/upload-sessions")
 def upload_data(sessions: UploadFile = File(...)):
@@ -28,18 +26,21 @@ def upload_data(sessions: UploadFile = File(...)):
     return {"message": "Data uploaded"}
 
 @app.post("/new-user")
-def append_new_user(query: Query):
+def append_new_user(body: Body):
     try:
-        group = app.database.create_new_user(query.username)
-        return {"message": f"Username {query.username} added. Your group is {group}"}
+        group = app.database.create_new_user(body.username)
+        return {"message": f"Username {body.username} added. Your group is {group}"}
     except ValueError as er:
         return {"message": "Sorry, user with that username exists."}
 
 @app.get("/{username}/prediction")
 def get_predictions(username: str, products, date=None):
-    products = list(map(int, products.split(',')))
     group = app.database.get_user_group(username)
-    predictions, week_number = app.models.get_predictions(group, products, date)
+    if products == "all":
+        predictions, week_number = app.models.get_all_predictions(group, date)
+    else:
+        products = list(map(int, products.split(',')))
+        predictions, week_number = app.models.get_predictions(group, products, date)
     app.database.save_prediction(group, predictions, week_number)
     return predictions
 

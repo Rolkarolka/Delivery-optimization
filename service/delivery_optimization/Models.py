@@ -1,3 +1,4 @@
+from numpy import product
 from numpy.core.fromnumeric import prod
 
 import pandas as pd
@@ -53,6 +54,10 @@ class Models:
         for product_id in products_id:
             predictions[product_id] = self.models[group][product_id].get_prediction(week_number)
         return predictions, week_number
+    
+    def get_all_predictions(self, group, date):
+        products_id = self.products_df.index
+        return self.get_predictions(group, products_id, date)
 
 class ModelA:
     def __init__(self, weeks_df, sessions_df):
