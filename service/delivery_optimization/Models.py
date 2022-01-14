@@ -108,3 +108,57 @@ class ModelB:
             self.bought_products += [0] * (week_number - len(self.bought_products))
         forecast = self.model.predict(start=week_number, end=week_number, dynamic=True)
         return forecast[0]
+
+    def product_viewed(self, product_id, df, dates, df_price = self.products_df):
+        viewed = df[(df['event_type'] == "VIEW_PRODUCT") & (df['product_id'] == product_id)]
+        product_amount = df[(df['event_type'] == "BUY_PRODUCT") & (df['product_id'] == product_id)]
+        daterange_df = pd.DataFrame()
+        time_list = [(dates.values[i].start_time, dates.values[i].end_time) for i in range(len(dates))]
+        daterange_df['count'] = [product_amount['timestamp'].between(s, e).sum() for s, e in time_list]
+        daterange_df['viewed'] = [viewed['timestamp'].between(s, e).sum() for s, e in time_list]
+        daterange_df['price'] = list(self.product_df[self.product_df.index == 1114]['price'])[0]
+        daterange_df['discount'] = 0
+        keys = product_amount.index
+        for i, time in enumerate(product_amount['timestamp']):
+            product_amount['timestamp'][keys[i]] = self.calculate_week_number(time.date())
+        keys = viewed.index
+        for i, time in enumerate(viewed['timestamp']):
+            viewed['timestamp'][keys[i]] = self.calculate_week_number(time.date())
+        keys_t = list(viewed['timestamp'])
+        j = 0
+        for i in daterange_df.index:
+            if i in keys_t:
+                daterange_df['discount'][i] = viewed['offered_discount'][keys[j]]
+                j += 1
+        return daterange_df
+
+    def predict_products_multivar(self, sessions_df, week_number, y = None):
+        products_predictions = {}
+        product_list = list(sessions_df['product_id'])
+        product_list = list(dict.fromkeys(product_list))
+        df, dates = self.prepare_dataframe(sessions_df)
+        product = 1114
+        if y is None:
+            y = self.product_viewed(product, sessions_df, dates)
+        train, test = self.split_data(y)
+        model_fit = self.fit_model(train['count'])
+        predicted = self.predict(week_number-1, week_number+1, train, model_fit)
+        products_predictions[product] = predicted['forecast'][week_number]
+        return products_predictions, test
+
+    def multi_var_arima(self, sessions_df, product, week_number):
+        df, dates = self.prepare_dataframe(sessions_df)
+        z = self.product_viewed(product, sessions_df, dates)
+        z['wsp_sprzedazy'] = z['count']*z['price']*z['discount']
+        z['wsp_wyswietlen'] = z['viewed']*z['price']*z['discount']
+        pred, test = self.predict_products_multivar(sessions_df, week_number, z)
+        return pred, test
+
+    def pred_all_products(self, sessions_df, week_number):
+        products_predictions = {}
+        product_list = list(sessions_df['product_id'])
+        product_list = list(dict.fromkeys(product_list))
+        for product in product_list:
+            pred, test = self.multi_var_arima(sessions_df, product, week_number)
+            products_predictions[product] = pred
+        return products_predictions
