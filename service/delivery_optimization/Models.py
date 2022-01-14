@@ -5,6 +5,9 @@ import pandas as pd
 from sklearn import linear_model
 import datetime
 from statsmodels.tsa.arima.model import ARIMA
+import warnings
+from statsmodels.tools.sm_exceptions import ConvergenceWarning
+warnings.simplefilter('ignore', ConvergenceWarning)
 
 class Models:
     def __init__(self, database_path):
@@ -109,7 +112,7 @@ class ModelB:
         forecast = self.model.predict(start=week_number, end=week_number, dynamic=True)
         return forecast[0]
 
-    def product_viewed(self, product_id, df, dates, df_price = self.products_df):
+    def product_viewed(self, product_id, df, dates):
         viewed = df[(df['event_type'] == "VIEW_PRODUCT") & (df['product_id'] == product_id)]
         product_amount = df[(df['event_type'] == "BUY_PRODUCT") & (df['product_id'] == product_id)]
         daterange_df = pd.DataFrame()

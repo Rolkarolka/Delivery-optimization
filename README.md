@@ -6,35 +6,14 @@ Project Organization
 
     ├── README.md          <- The top-level README for developers using this project.
     ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
     │
     ├── models             <- Trained and serialized models, model predictions, or model summaries
     │
     ├── notebooks          <- Jupyter notebooks.
     │
     ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
     │
-    ├── delivery_optimization <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    ├── tests              <- Unit tests
+    ├── reports           <- microservice
     |
     ├── poetry.lock        <- Lockfile which allows complete environment reproduction
     │
@@ -94,12 +73,12 @@ Dane do modelowania:
 - stosunek ilości zamówień w danych okresach roku (np. miesięcznie, kwartalnie)
 - aktywność użytkowników oraz produkty, które wyświetlają.
 
-Zmianna celu: prawdopodobieństwo z jakim dany produkt będzie potrzebny w najbliższym tygodniu.
+Zmianna celu: ilość sprzedanych sztuk produktu w przewidywanym tygodniu.
 
 Przewidywanie produktów, które w danym tygodniu powinny znajdować się na półkach magazynowych.
 
 Założenia:
-- liczba miejsc w magazynie jest ograniczona - ustalamy ją jako stałą
+- liczba miejsc w magazynie jest ograniczona - ustalamy ją jako stałą.
 - produkty, które zamawiamy trafiają do nas od razu - nie musimy brać pod uwagę czasu potrzebnego na ich dotarcie do naszego magazynu
 - produkty, które zamawiamy od dostawców są zawsze dostępne.
 ### Zaproponowanie kryteriów sukcesu
